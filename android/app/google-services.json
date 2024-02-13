@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897565004395",
+    "project_id": "balagh-7ebc6",
+    "storage_bucket": "balagh-7ebc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897565004395:android:f433b58ceaf8928d46172e",
+        "android_client_info": {
+          "package_name": "com.example.balagh"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIruVaEeicbmiZut8c3--G-aKQmz0y0Yk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
