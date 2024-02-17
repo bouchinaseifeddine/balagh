@@ -11,31 +11,31 @@ class ReportsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: FutureBuilder(
-        future: fetchUserReports(),
-        builder: (context, AsyncSnapshot<List<Report>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-                child: CircularProgressIndicator(
-              color: kMidtBlue,
-            ));
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No reports found.'));
-          } else {
-            final reports = snapshot.data!;
-            return ListView.builder(
+    return FutureBuilder(
+      future: fetchUserReports(),
+      builder: (context, AsyncSnapshot<List<Report>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+              child: CircularProgressIndicator(
+            color: kMidtBlue,
+          ));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No reports found.'));
+        } else {
+          final reports = snapshot.data!;
+          return Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: ListView.builder(
               itemCount: reports.length,
               itemBuilder: (context, index) {
                 return ReportCard(report: reports[index]);
               },
-            );
-          }
-        },
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -60,6 +60,7 @@ class ReportsView extends StatelessWidget {
             latitude: doc['location'].latitude,
             longitude: doc['location'].longitude),
         currentState: doc['currentState'],
+        likes: doc['likes'],
       );
     }).toList();
   }

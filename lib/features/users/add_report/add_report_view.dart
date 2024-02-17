@@ -89,6 +89,7 @@ class _AddReportViewState extends State<AddReportView> {
         'isurgent': _isUrgent,
         'location': geoPoint,
         'adress': reportLocation!.adress,
+        'likes': 0,
       });
 
       final storageRef = FirebaseStorage.instance

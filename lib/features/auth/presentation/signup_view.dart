@@ -61,6 +61,7 @@ class _SignupViewState extends State<SignupView> {
         'email': _entredEmail,
         'role': 'user',
         'image_url': '',
+        'likedReports': [],
       });
 
       // we use context mounted to check if the current widget is still visible on the screen

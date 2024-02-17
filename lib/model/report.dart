@@ -35,7 +35,7 @@ class Report {
     required this.firstImage,
     this.secondImage,
     required this.isUrgent,
-    this.likes = 0,
+    required this.likes,
     this.comments,
     required this.currentState,
   });

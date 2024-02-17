@@ -8,6 +8,8 @@ Future<appUser?> getUserData(String userId) async {
 
     if (snapshot.exists) {
       final userData = snapshot.data()!;
+      List<String>? likedReports =
+          List<String>.from(userData['likedReports'] ?? []);
       return appUser(
         id: userId,
         userName: userData['username'] ?? '',
@@ -15,6 +17,7 @@ Future<appUser?> getUserData(String userId) async {
         imageUrl: userData['image_url'] ?? '',
         address: userData['address'] ?? '',
         role: userData['role'] ?? '',
+        likedReports: likedReports,
       );
     } else {
       print('User with ID $userId does not exist.');

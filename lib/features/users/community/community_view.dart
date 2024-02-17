@@ -18,62 +18,59 @@ class _CommunityViewState extends State<CommunityView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  _selectedTab = 1;
-                });
-              },
-              child: Text('Reported',
-                  style: TextStyle(
-                      color: _selectedTab == 1 ? kMidtBlue : kDarkGrey,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600))),
-          SizedBox(width: SizeConfig.defaultSize),
-          TextButton(
-              onPressed: () {
-                setState(() {
-                  _selectedTab = 2;
-                });
-              },
-              child: Text('Fixed',
-                  style: TextStyle(
-                      color: _selectedTab == 2 ? kMidtBlue : kDarkGrey,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600)))
-        ]),
-        SizedBox(height: SizeConfig.defaultSize),
-        Expanded(
-          child: FutureBuilder(
-            future: fetchReports(),
-            builder: (context, AsyncSnapshot<List<Report>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                    child: CircularProgressIndicator(
-                  color: kMidtBlue,
-                ));
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No reports found.'));
-              } else {
-                final reports = snapshot.data!;
-                return ListView.builder(
-                  itemCount: reports.length,
-                  itemBuilder: (context, index) {
-                    return ReportCard(report: reports[index]);
-                  },
-                );
-              }
+    return Column(children: [
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedTab = 1;
+              });
             },
-          ),
-        ),
+            child: Text('Reported',
+                style: TextStyle(
+                    color: _selectedTab == 1 ? kMidtBlue : kDarkGrey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600))),
+        SizedBox(width: SizeConfig.defaultSize),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedTab = 2;
+              });
+            },
+            child: Text('Fixed',
+                style: TextStyle(
+                    color: _selectedTab == 2 ? kMidtBlue : kDarkGrey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600)))
       ]),
-    );
+      SizedBox(height: SizeConfig.defaultSize),
+      Expanded(
+        child: FutureBuilder(
+          future: fetchReports(),
+          builder: (context, AsyncSnapshot<List<Report>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: kMidtBlue,
+              ));
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No reports found.'));
+            } else {
+              final reports = snapshot.data!;
+              return ListView.builder(
+                itemCount: reports.length,
+                itemBuilder: (context, index) {
+                  return ReportCard(report: reports[index]);
+                },
+              );
+            }
+          },
+        ),
+      ),
+    ]);
   }
 
   Future<List<Report>> fetchReports() async {
@@ -92,20 +89,19 @@ class _CommunityViewState extends State<CommunityView> {
 
     return snapshot.docs.map((doc) {
       return Report(
-        reportId: doc.id,
-        userId: doc['userid'],
-        type: doc['type'],
-        description: doc['description'],
-        firstImage: doc['firstimageUrl'],
-        isUrgent: doc['isurgent'],
-        dateOfReporting: doc['reportingdate'].toDate(),
-        location: ReportLocation(
-            adress: doc['adress'],
-            latitude: doc['location'].latitude,
-            longitude: doc['location'].longitude),
-        currentState: doc['currentState'],
-        likes: doc['likes'],
-      );
+          reportId: doc.id,
+          userId: doc['userid'],
+          type: doc['type'],
+          description: doc['description'],
+          firstImage: doc['firstimageUrl'],
+          isUrgent: doc['isurgent'],
+          dateOfReporting: doc['reportingdate'].toDate(),
+          location: ReportLocation(
+              adress: doc['adress'],
+              latitude: doc['location'].latitude,
+              longitude: doc['location'].longitude),
+          currentState: doc['currentState'],
+          likes: doc['likes']);
     }).toList();
   }
 }

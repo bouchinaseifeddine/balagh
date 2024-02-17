@@ -19,6 +19,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
   var _isLiked = false;
   late DocumentReference _reportRef;
   appUser? _reporter;
+  appUser? user;
 
   @override
   void initState() {
@@ -31,7 +32,6 @@ class _ReportBigCardState extends State<ReportBigCard> {
 
   void getReporterData() async {
     _reporter = await getUserData(widget.report.userId);
-    setState(() {});
   }
 
   @override
@@ -56,7 +56,8 @@ class _ReportBigCardState extends State<ReportBigCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -102,17 +103,19 @@ class _ReportBigCardState extends State<ReportBigCard> {
                 Image.network(
                   widget.report.firstImage,
                   fit: BoxFit.fill,
-                  height: 250,
+                  height: SizeConfig.screenHeight! / 3.5,
                   width: double.infinity,
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.report.description,
+                          overflow: TextOverflow.ellipsis,
+                          "dsadssadsdaaaaaaaaaaaaaaaaaaa",
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium!
@@ -122,19 +125,19 @@ class _ReportBigCardState extends State<ReportBigCard> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                if (!_isLiked) {
-                                  _reportRef.update(
-                                      {'likes': FieldValue.increment(1)});
-                                  widget.report.likes = widget.report.likes + 1;
-                                  setState(() {
-                                    _isLiked = true;
-                                  });
-                                } else {
+                                if (_isLiked) {
                                   _reportRef.update(
                                       {'likes': FieldValue.increment(-1)});
                                   widget.report.likes = widget.report.likes - 1;
                                   setState(() {
                                     _isLiked = false;
+                                  });
+                                } else {
+                                  _reportRef.update(
+                                      {'likes': FieldValue.increment(1)});
+                                  widget.report.likes = widget.report.likes + 1;
+                                  setState(() {
+                                    _isLiked = true;
                                   });
                                 }
                               },
@@ -150,7 +153,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                                 child: Icon(
                                   color: kMidtBlue,
                                   size: 30,
-                                  _isLiked
+                                  _isLiked!
                                       ? Ionicons.flame
                                       : Ionicons.flame_outline,
                                   key: ValueKey(_isLiked),

@@ -5,6 +5,7 @@ class appUser {
   final String imageUrl;
   final String address;
   final String role;
+  List<String>? likedReports;
 
   appUser({
     required this.id,
@@ -13,5 +14,6 @@ class appUser {
     required this.imageUrl,
     required this.address,
     required this.role,
+    this.likedReports,
   });
 }

@@ -1,5 +1,4 @@
 import 'package:balagh/core/constants/constants.dart';
-
 import 'package:balagh/features/users/widgets/report_big_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,6 @@ class _ReportCommentsViewState extends State<ReportCommentsView> {
             padding: const EdgeInsets.all(20),
             child: Column(children: [
               ReportBigCard(report: widget.report),
-              const Text('heey'),
             ]),
           ),
         ));
