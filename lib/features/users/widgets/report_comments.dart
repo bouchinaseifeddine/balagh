@@ -1,4 +1,7 @@
 import 'package:balagh/core/constants/constants.dart';
+import 'package:balagh/core/utils/size_config.dart';
+import 'package:balagh/features/users/widgets/comments.dart';
+import 'package:balagh/features/users/widgets/new_comment.dart';
 import 'package:balagh/features/users/widgets/report_big_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:flutter/material.dart';
@@ -42,8 +45,23 @@ class _ReportCommentsViewState extends State<ReportCommentsView> {
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               ReportBigCard(report: widget.report),
+              SizedBox(height: SizeConfig.defaultSize! * 3),
+              Text(
+                'Comments',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: kMidtBlue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26),
+              ),
+              SizedBox(height: SizeConfig.defaultSize! * 2),
+              SizedBox(
+                height: SizeConfig.screenHeight! / 4,
+                child: Comments(report: widget.report),
+              ),
+              NewComment(report: widget.report),
             ]),
           ),
         ));

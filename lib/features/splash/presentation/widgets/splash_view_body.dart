@@ -1,3 +1,5 @@
+import 'package:balagh/features/admin/admin_navigation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +23,7 @@ class SplashViewBody extends StatefulWidget {
 
 class _SplashViewBodyState extends State<SplashViewBody>
     with TickerProviderStateMixin {
+  Widget? nextPage;
   late AnimationController _opacityController;
   late Animation<double> _opacityAnimation;
   late AnimationController _controller1;
@@ -93,13 +96,11 @@ class _SplashViewBodyState extends State<SplashViewBody>
             builder: (context, state) {
               if (state is OnboardingShownState) {
                 return StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, snapshot) {
-                      if (snapshot.hasData) {
-                        return const UserNavigation();
-                      }
-                      return const LoginView();
-                    });
+                  stream: FirebaseAuth.instance.authStateChanges(),
+                  builder: (ctx, snapshot) {
+                    return _nextPage(snapshot);
+                  },
+                );
               } else if (state is OnboardingInitialState) {
                 return const OnboardingView();
               } else {
@@ -110,6 +111,41 @@ class _SplashViewBodyState extends State<SplashViewBody>
         ),
       );
     });
+  }
+
+  Widget _nextPage(AsyncSnapshot<User?> snapshot) {
+    if (snapshot.hasData) {
+      return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('users')
+            .doc(snapshot.data!.uid)
+            .get(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot> userDataSnapshot) {
+          if (userDataSnapshot.connectionState == ConnectionState.waiting) {
+            // Return a loading indicator if data is still loading
+            return CircularProgressIndicator();
+          } else if (userDataSnapshot.hasError) {
+            // Return an error message if an error occurred
+            return Text('Error: ${userDataSnapshot.error}');
+          } else {
+            final role = userDataSnapshot.data?['role'];
+            print('role $role');
+
+            switch (role) {
+              case 'user':
+                return const UserNavigation();
+              case 'admin':
+                return const AdminNavigation();
+              default:
+                return const LoginView();
+            }
+          }
+        },
+      );
+    } else {
+      return const LoginView();
+    }
   }
 
   @override

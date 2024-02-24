@@ -1,19 +1,19 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/report_card.dart';
+import 'package:balagh/features/admin/reports/report_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class CommunityView extends StatefulWidget {
-  const CommunityView({super.key});
+class ReportsView extends StatefulWidget {
+  const ReportsView({super.key});
 
   @override
-  State<CommunityView> createState() => _CommunityViewState();
+  State<ReportsView> createState() => _ReportsViewState();
 }
 
-class _CommunityViewState extends State<CommunityView> {
+class _ReportsViewState extends State<ReportsView> {
   var _selectedTab = 1;
 
   @override
@@ -26,7 +26,7 @@ class _CommunityViewState extends State<CommunityView> {
                 _selectedTab = 1;
               });
             },
-            child: Text('Reported',
+            child: Text('Pending',
                 style: TextStyle(
                     color: _selectedTab == 1 ? kMidtBlue : kDarkGrey,
                     fontSize: 18,
@@ -38,11 +38,23 @@ class _CommunityViewState extends State<CommunityView> {
                 _selectedTab = 2;
               });
             },
-            child: Text('Fixed',
+            child: Text('Reported',
                 style: TextStyle(
                     color: _selectedTab == 2 ? kMidtBlue : kDarkGrey,
                     fontSize: 18,
-                    fontWeight: FontWeight.w600)))
+                    fontWeight: FontWeight.w600))),
+        SizedBox(width: SizeConfig.defaultSize),
+        TextButton(
+            onPressed: () {
+              setState(() {
+                _selectedTab = 3;
+              });
+            },
+            child: Text('Fixed',
+                style: TextStyle(
+                    color: _selectedTab == 3 ? kMidtBlue : kDarkGrey,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600))),
       ]),
       SizedBox(height: SizeConfig.defaultSize),
       Expanded(
@@ -60,14 +72,11 @@ class _CommunityViewState extends State<CommunityView> {
               return const Center(child: Text('No reports found.'));
             } else {
               final reports = snapshot.data!;
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.builder(
-                  itemCount: reports.length,
-                  itemBuilder: (context, index) {
-                    return ReportCard(report: reports[index]);
-                  },
-                ),
+              return ListView.builder(
+                itemCount: reports.length,
+                itemBuilder: (context, index) {
+                  return ReportCard(report: reports[index]);
+                },
               );
             }
           },
@@ -79,6 +88,11 @@ class _CommunityViewState extends State<CommunityView> {
   Future<List<Report>> fetchReports() async {
     final QuerySnapshot<Map<String, dynamic>> snapshot;
     if (_selectedTab == 1) {
+      snapshot = await FirebaseFirestore.instance
+          .collection('reports')
+          .where('currentState', isEqualTo: 'pending')
+          .get();
+    } else if (_selectedTab == 2) {
       snapshot = await FirebaseFirestore.instance
           .collection('reports')
           .where('currentState', isEqualTo: 'reported')

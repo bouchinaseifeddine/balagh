@@ -27,11 +27,14 @@ class ReportsView extends StatelessWidget {
           final reports = snapshot.data!;
           return Container(
             margin: const EdgeInsets.only(top: 20),
-            child: ListView.builder(
-              itemCount: reports.length,
-              itemBuilder: (context, index) {
-                return ReportCard(report: reports[index]);
-              },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.builder(
+                itemCount: reports.length,
+                itemBuilder: (context, index) {
+                  return ReportCard(report: reports[index]);
+                },
+              ),
             ),
           );
         }

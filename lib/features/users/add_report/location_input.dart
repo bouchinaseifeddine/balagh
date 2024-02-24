@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,7 +27,7 @@ class _LocationInputState extends State<LocationInput> {
     }
     final lat = _pickedLocation!.latitude;
     final lng = _pickedLocation!.longitude;
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng=&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=API_KEY';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng=&zoom=15&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=AIzaSyCdIq65pwy2KoNBa42AhnecTG3wZN5j4EQ';
   }
 
   void _getCurrentLocation() async {
@@ -67,10 +66,22 @@ class _LocationInputState extends State<LocationInput> {
     }
 
     final url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=API_KEY');
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=36.82164884592473,7.717324087451077&key=AIzaSyCdIq65pwy2KoNBa42AhnecTG3wZN5j4EQ');
     final response = await http.get(url);
     final resData = json.decode(response.body);
-    final adress = resData['results'][0]['formatted_address'];
+    final addressComponents = resData['results'][0]['address_components'];
+    String adress;
+    String? city;
+    String? country;
+    for (var component in addressComponents) {
+      final types = component['types'];
+      if (types.contains('locality')) {
+        city = component['long_name'];
+      } else if (types.contains('country')) {
+        country = component['long_name'];
+      }
+    }
+    adress = '$city, $country';
 
     setState(() {
       _pickedLocation = ReportLocation(

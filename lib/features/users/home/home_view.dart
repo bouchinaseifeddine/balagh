@@ -1,9 +1,15 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
+import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/nearby_report.dart';
+import 'package:balagh/features/users/widgets/report_card.dart';
+import 'package:balagh/features/users/widgets/report_big_card.dart';
+import 'package:balagh/model/report.dart';
+import 'package:balagh/model/report_location.dart';
+import 'package:balagh/model/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key, required this.navigateToPage});
@@ -15,16 +21,19 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  String? userReportId;
+  Report? userReport;
+  List<Report> nearbyReports = [];
+  @override
+  void initState() {
+    super.initState();
+    fetchUserReport();
+    fetchNearbyReports();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> nearbyReports = [
-      'Report 1',
-      'Report 2',
-      'Report 3',
-      'Report 4',
-      'Report 5',
-      // Add more reports
-    ];
+    print('dsadad $nearbyReports');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SingleChildScrollView(
@@ -36,9 +45,9 @@ class _HomeViewState extends State<HomeView> {
                 top: SizeConfig.defaultSize! * 2,
               ),
               decoration: BoxDecoration(
-                border: Border.all(color: kDarkGrey.withOpacity(0.7), width: 1),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
                 color: kWhite,
+                border: Border.all(color: kDarkGrey.withOpacity(0.4), width: 1),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -83,7 +92,7 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
             ),
-            SizedBox(height: SizeConfig.defaultSize! * 4),
+            SizedBox(height: SizeConfig.defaultSize! * 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -100,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
                     widget.navigateToPage(2);
                   },
                   child: Text(
-                    'View all',
+                    'See all',
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           color: kDarkBlue,
                         ),
@@ -108,123 +117,18 @@ class _HomeViewState extends State<HomeView> {
                 )
               ],
             ),
-            SizedBox(height: SizeConfig.defaultSize! * 3),
-            Container(
-              decoration: BoxDecoration(
-                color: kWhite,
-                border: Border.all(color: kDarkGrey.withOpacity(0.7), width: 1),
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-              child: SizedBox(
-                height: SizeConfig.defaultSize! * 18,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          'assets/images/pothole.JPG',
-                          fit: BoxFit.fill,
-                          height: double.infinity,
-                          width: (SizeConfig.screenWidth! - 80) / 2.7,
-                        ),
-                      ),
-                      SizedBox(width: SizeConfig.defaultSize! * 1.5),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Pot Hole',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(
-                                      color: kMidtBlue,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20),
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(Ionicons.calendar_outline),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Date',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                        color: kDarkBlue,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const Icon(Ionicons.location_outline),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Location',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                        color: kDarkBlue,
-                                      ),
-                                ),
-                              ],
-                            ),
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Ionicons.flame_outline,
-                                      color: kMidtBlue,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      '10',
-                                      style: TextStyle(color: kMidtBlue),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Ionicons.chatbubbles_outline,
-                                      color: kMidtBlue,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      '10',
-                                      style: TextStyle(color: kMidtBlue),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: SizeConfig.defaultSize! * 3),
-                      const Icon(
-                        Icons.miscellaneous_services_outlined,
-                        size: 42,
-                        color: kMidtBlue,
-                      )
-                    ],
+            SizedBox(height: SizeConfig.defaultSize! * 2),
+            if (userReport != null) ReportBigCard(report: userReport!),
+            if (userReport == null)
+              SizedBox(
+                height: SizeConfig.defaultSize! * 10,
+                child: const Center(
+                  child: Text(
+                    'No report found, Start adding some',
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: SizeConfig.defaultSize! * 3),
+            SizedBox(height: SizeConfig.defaultSize! * 2),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -238,18 +142,105 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-            SizedBox(height: SizeConfig.defaultSize! * 3),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: nearbyReports.length,
-              itemBuilder: (context, index) {
-                return NearbyReport(reportTitle: nearbyReports[index]);
-              },
-            ),
+            SizedBox(height: SizeConfig.defaultSize! * 1),
+            if (nearbyReports.isNotEmpty)
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: nearbyReports.length,
+                itemBuilder: (context, index) {
+                  return ReportCard(report: nearbyReports[index]);
+                },
+              ),
+            if (nearbyReports.isEmpty)
+              SizedBox(
+                height: SizeConfig.defaultSize! * 10,
+                child: const Center(
+                  child: Text(
+                    'No Nearby Reports found.',
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> fetchUserReport() async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      print('userId ${userId}');
+      if (userId != null) {
+        final userSnapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('userid', isEqualTo: userId)
+            .get();
+        if (userSnapshot.docs.isNotEmpty) {
+          setState(() {
+            userReport = Report(
+                reportId: userSnapshot.docs.first.id,
+                userId: userSnapshot.docs.first['userid'],
+                type: userSnapshot.docs.first['type'],
+                description: userSnapshot.docs.first['description'],
+                firstImage: userSnapshot.docs.first['firstimageUrl'],
+                isUrgent: userSnapshot.docs.first['isurgent'],
+                dateOfReporting:
+                    userSnapshot.docs.first['reportingdate'].toDate(),
+                location: ReportLocation(
+                    adress: userSnapshot.docs.first['adress'],
+                    latitude: userSnapshot.docs.first['location'].latitude,
+                    longitude: userSnapshot.docs.first['location'].longitude),
+                currentState: userSnapshot.docs.first['currentState'],
+                likes: userSnapshot.docs.first['likes']);
+          });
+        } else {
+          setState(() {
+            userReport = null;
+          });
+        }
+      }
+    } catch (error) {}
+  }
+
+  Future<void> fetchNearbyReports() async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      appUser? userData;
+
+      print('userId ${userId}');
+      if (userId != null) {
+        userData = await getUserData(userId);
+        final reportsSnapShots = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'reported')
+            .where('userid', isNotEqualTo: userId)
+            .get();
+
+        if (reportsSnapShots.docs.isNotEmpty) {
+          nearbyReports = reportsSnapShots.docs
+              .map((doc) => Report(
+                  reportId: doc.id,
+                  userId: doc['userid'],
+                  type: doc['type'],
+                  description: doc['description'],
+                  firstImage: doc['firstimageUrl'],
+                  isUrgent: doc['isurgent'],
+                  dateOfReporting: doc['reportingdate'].toDate(),
+                  location: ReportLocation(
+                      adress: doc['adress'],
+                      latitude: doc['location'].latitude,
+                      longitude: doc['location'].longitude),
+                  currentState: doc['currentState'],
+                  likes: doc['likes']))
+              .toList();
+          setState(() {});
+        } else {
+          nearbyReports = [];
+        }
+      }
+    } catch (error) {
+      print('Error fetching user report: $error');
+    }
   }
 }

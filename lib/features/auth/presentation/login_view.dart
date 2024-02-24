@@ -1,5 +1,7 @@
+import 'package:balagh/features/admin/admin_navigation.dart';
 import 'package:balagh/features/auth/presentation/forget_password_view.dart';
 import 'package:balagh/features/users/user_navigation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -115,9 +117,25 @@ class _LoginScreenState extends State<LoginView> {
     }
   }
 
-  void _nextPage() {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx) => const UserNavigation()));
+  void _nextPage() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_firebase.currentUser!.uid)
+        .get();
+    final role = snapshot.data()?['role'];
+    if (!context.mounted) {
+      return;
+    }
+    switch (role) {
+      case 'user':
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) => const UserNavigation()));
+        break;
+      case 'admin':
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) => const AdminNavigation()));
+      default:
+    }
   }
 
   @override
@@ -190,7 +208,6 @@ class _LoginScreenState extends State<LoginView> {
                   child: Column(
                     children: [
                       TextFormField(
-                        onTap: () {},
                         controller: _emailController,
                         style: textStyleInput,
                         validator: (value) {

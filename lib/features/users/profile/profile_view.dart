@@ -29,6 +29,8 @@ class _ProfilViewState extends State<ProfileView> {
   appUser? user;
   String? _entredUserName;
   String? _entredAdress;
+  int totalReports = 0;
+  var totalComments;
   var lightmode = true;
 
   // used to hide the keyboard when the user press submit
@@ -129,6 +131,21 @@ class _ProfilViewState extends State<ProfileView> {
       _addressController.text = user!.address;
       _userNameController.text = user!.userName;
 
+      final QuerySnapshot<Map<String, dynamic>> commentsSnapShot =
+          await FirebaseFirestore.instance
+              .collection('comments')
+              .where('userId', isEqualTo: userAuthenticated.uid)
+              .get();
+
+      final QuerySnapshot<Map<String, dynamic>> reportsSnapShot =
+          await FirebaseFirestore.instance
+              .collection('reports')
+              .where('userid', isEqualTo: userAuthenticated.uid)
+              .get();
+
+      totalComments = commentsSnapShot.size;
+      totalReports = reportsSnapShot.size;
+      print('total $totalComments');
       return true;
     } catch (error) {
       print('Error fetching data: $error');
@@ -212,7 +229,7 @@ class _ProfilViewState extends State<ProfileView> {
                         decoration: BoxDecoration(
                           color: kWhite,
                           border: Border.all(
-                              color: kDarkGrey.withOpacity(0.7), width: 1),
+                              color: kDarkGrey.withOpacity(0.4), width: 1),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(12)),
                         ),
@@ -245,7 +262,7 @@ class _ProfilViewState extends State<ProfileView> {
                                   Column(
                                     children: [
                                       Text(
-                                        '12',
+                                        totalReports.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge!
@@ -274,7 +291,7 @@ class _ProfilViewState extends State<ProfileView> {
                                   Column(
                                     children: [
                                       Text(
-                                        '34',
+                                        totalComments.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge!
@@ -339,7 +356,7 @@ class _ProfilViewState extends State<ProfileView> {
                         decoration: BoxDecoration(
                           color: kWhite,
                           border: Border.all(
-                              color: kDarkGrey.withOpacity(0.6), width: 2),
+                              color: kDarkGrey.withOpacity(0.4), width: 2),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(12)),
                         ),
@@ -359,7 +376,7 @@ class _ProfilViewState extends State<ProfileView> {
                         decoration: BoxDecoration(
                           color: kWhite,
                           border: Border.all(
-                              color: kDarkGrey.withOpacity(0.6), width: 2),
+                              color: kDarkGrey.withOpacity(0.4), width: 2),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(12)),
                         ),
@@ -372,6 +389,9 @@ class _ProfilViewState extends State<ProfileView> {
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return 'This field is required';
+                            }
+                            if (value.trim().length > 10) {
+                              return 'Username is too long';
                             }
                             if (value.trim().length < 4) {
                               return 'Username must be at least 4 characters long';
@@ -391,7 +411,7 @@ class _ProfilViewState extends State<ProfileView> {
                         decoration: BoxDecoration(
                           color: kWhite,
                           border: Border.all(
-                              color: kDarkGrey.withOpacity(0.6), width: 2),
+                              color: kDarkGrey.withOpacity(0.4), width: 2),
                           borderRadius:
                               const BorderRadius.all(Radius.circular(12)),
                         ),
@@ -404,6 +424,7 @@ class _ProfilViewState extends State<ProfileView> {
                             if (value == null || value.trim().isEmpty) {
                               return 'This field is required';
                             }
+
                             if (value.trim().length < 4) {
                               return 'Adress must be at least 4 characters long';
                             }
