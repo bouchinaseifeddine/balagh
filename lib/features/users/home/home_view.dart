@@ -1,12 +1,10 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
-import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
 import 'package:balagh/features/users/widgets/report_card.dart';
 import 'package:balagh/features/users/widgets/report_big_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
-import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +31,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    print('dsadad $nearbyReports');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: SingleChildScrollView(
@@ -170,7 +167,6 @@ class _HomeViewState extends State<HomeView> {
   Future<void> fetchUserReport() async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
-      print('userId ${userId}');
       if (userId != null) {
         final userSnapshot = await FirebaseFirestore.instance
             .collection('reports')
@@ -206,11 +202,8 @@ class _HomeViewState extends State<HomeView> {
   Future<void> fetchNearbyReports() async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
-      appUser? userData;
 
-      print('userId ${userId}');
       if (userId != null) {
-        userData = await getUserData(userId);
         final reportsSnapShots = await FirebaseFirestore.instance
             .collection('reports')
             .where('currentState', isEqualTo: 'reported')

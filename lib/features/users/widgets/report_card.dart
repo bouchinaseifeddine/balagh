@@ -7,16 +7,14 @@ import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ReportCard extends StatelessWidget {
-  const ReportCard({super.key, required this.report, required this.onTap});
+  const ReportCard({super.key, required this.report});
 
   final Report report;
-  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTap();
         Navigator.push(
           context,
           PageTransition(
