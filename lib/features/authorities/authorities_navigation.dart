@@ -1,5 +1,5 @@
 import 'package:balagh/features/admin/accounts/accounts_view.dart';
-import 'package:balagh/features/admin/reports/reports_view.dart';
+import 'package:balagh/features/authorities/reports/reports_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,33 +9,28 @@ import 'package:balagh/core/utils/size_config.dart';
 import 'package:balagh/cubits/user_cubit/user_cubit.dart';
 import 'package:balagh/cubits/user_cubit/user_states.dart';
 import 'package:balagh/features/users/profile/profile_view.dart';
-import 'package:balagh/features/users/widgets/navbar_item.dart';
 import 'package:balagh/model/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AdminNavigation extends StatefulWidget {
-  const AdminNavigation({super.key});
+class AuthoritiesNavigation extends StatefulWidget {
+  const AuthoritiesNavigation({super.key});
 
   @override
-  State<AdminNavigation> createState() => _AdminNavigationState();
+  State<AuthoritiesNavigation> createState() => _AuthoritiesNavigationState();
 }
 
-class _AdminNavigationState extends State<AdminNavigation> {
+class _AuthoritiesNavigationState extends State<AuthoritiesNavigation> {
   int _currentTab = 0;
   appUser? user;
-
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     fetchData();
-    _pageController = PageController(initialPage: _currentTab);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
@@ -47,32 +42,8 @@ class _AdminNavigationState extends State<AdminNavigation> {
     } catch (error) {}
   }
 
-  void navigateToPage(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  String _getTabName(int tabIndex) {
-    switch (tabIndex) {
-      case 0:
-        return 'Reports';
-      case 1:
-        return 'Accounts';
-      default:
-        return '';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [
-      const ReportsView(),
-      const AccountsView(),
-    ];
-
     SizeConfig().init;
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       if (state is UserLoading || user == null) {
@@ -100,13 +71,13 @@ class _AdminNavigationState extends State<AdminNavigation> {
           elevation: 0,
           title: Row(
             children: [
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _getTabName(_currentTab),
-                    style: const TextStyle(
+                    'Reports',
+                    style: TextStyle(
                       color: kMidtBlue,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
@@ -141,52 +112,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
             ],
           ),
         ),
-        body: PageView(
-          controller: _pageController,
-          children: screens,
-          onPageChanged: (index) {
-            setState(() {
-              _currentTab = index;
-            });
-          },
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            color: kWhite,
-            border: Border.all(color: kDarkGrey.withOpacity(0.9), width: 1),
-          ),
-          child: BottomAppBar(
-            elevation: 0,
-            color: Colors.transparent,
-            height: 80,
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 10,
-            child: SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  NavbarItem(
-                      index: 0,
-                      icon: Icons.report,
-                      label: 'Reports',
-                      currentTab: _currentTab,
-                      onTap: navigateToPage),
-                  NavbarItem(
-                      index: 1,
-                      icon: Icons.supervisor_account_sharp,
-                      label: 'Accounts',
-                      currentTab: _currentTab,
-                      onTap: navigateToPage),
-                ],
-              ),
-            ),
-          ),
-        ),
+        body: ReportsView(user: user),
       );
     });
   }

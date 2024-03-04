@@ -9,6 +9,7 @@ import 'package:balagh/features/users/add_report/location_input.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,24 @@ class _AddReportViewState extends State<AddReportView> {
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    setupPushNotification();
+  }
+
+  void setupPushNotification() async {
+    final fcm = FirebaseMessaging.instance;
+    await fcm.requestPermission();
+
+    final token = await fcm.getToken();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .update({'fcmToken': token});
+  }
 
   void setLocation(location) {
     reportLocation = location;
@@ -83,7 +102,9 @@ class _AddReportViewState extends State<AddReportView> {
         'userid': FirebaseAuth.instance.currentUser!.uid,
         'type': _selectedType,
         'firstimageUrl': '',
+        'secondimageUrl': '',
         'reportingdate': currentTime,
+        'fixingdate': currentTime,
         'description': _entredDescription,
         'currentState': 'pending',
         'isurgent': _isUrgent,
@@ -105,6 +126,9 @@ class _AddReportViewState extends State<AddReportView> {
         _isAuthenticating = false;
       });
 
+      if (!context.mounted) {
+        return;
+      }
       _showReportAddedDialog(context);
     } catch (error) {
       setState(() {

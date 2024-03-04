@@ -18,7 +18,7 @@ class Report {
   final DateTime? dateOfFixing;
   var type;
   final String firstImage;
-  final String? secondImage;
+  final String secondImage;
   var likes;
   var comments;
   var currentState;
@@ -33,7 +33,7 @@ class Report {
     this.dateOfFixing,
     required this.type,
     required this.firstImage,
-    this.secondImage,
+    required this.secondImage,
     required this.isUrgent,
     required this.likes,
     this.comments,
@@ -47,5 +47,13 @@ class Report {
 
   String get formattedDateOfFixing {
     return DateFormat.yMMMMEEEEd().format(dateOfFixing!);
+  }
+
+  String shortFormattedDate(dateString) {
+    DateTime dateTime = DateFormat("EEEE, MMMM d, yyyy").parse(dateString);
+
+    // Format the DateTime object to display only the month and day
+    String trimmedDate = DateFormat("MMM dd").format(dateTime);
+    return trimmedDate;
   }
 }

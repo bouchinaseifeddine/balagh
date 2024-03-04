@@ -38,12 +38,12 @@ class _NavbarItemState extends State<NavbarItem> {
           Icon(
             size: 32,
             widget.icon,
-            color: widget.currentTab == widget.index ? kDeepBlue : kDarkGrey,
+            color: widget.currentTab == widget.index ? kMidtBlue : kDarkGrey,
           ),
           Text(
             widget.label,
             style: TextStyle(
-              color: widget.currentTab == widget.index ? kDeepBlue : kDarkGrey,
+              color: widget.currentTab == widget.index ? kMidtBlue : kDarkGrey,
             ),
           ),
         ],

@@ -52,7 +52,7 @@ class _ImageInputState extends State<ImageInput> {
       decoration: BoxDecoration(
           color: kWhite,
           border: Border.all(color: kDarkGrey.withOpacity(0.7), width: 1),
-          borderRadius: const BorderRadius.all(Radius.circular(8))),
+          borderRadius: const BorderRadius.all(Radius.circular(24))),
       child: content,
     );
   }

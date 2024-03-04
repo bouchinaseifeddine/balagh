@@ -98,7 +98,9 @@ class _ReportProgressState extends State<ReportProgress> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: Image.network(
-                              widget.report.firstImage,
+                              widget.report.secondImage != ''
+                                  ? widget.report.secondImage
+                                  : widget.report.firstImage,
                               fit: BoxFit.cover,
                               width: double.infinity,
                             ),
@@ -120,18 +122,24 @@ class _ReportProgressState extends State<ReportProgress> {
                     isFirst: true,
                     isLast: false,
                     isPast: widget.report.currentState == 'fixed',
+                    date: widget.report.shortFormattedDate(
+                        widget.report.formattedDateOfFixing),
                     eventText: '${widget.report.type} is fixed'),
                 MyTimeLineTile(
                   isFirst: false,
                   isLast: false,
                   isPast: widget.report.currentState == 'reported' ||
                       widget.report.currentState == 'fixed',
+                  date: widget.report.shortFormattedDate(
+                      widget.report.formattedDateOfReporting),
                   eventText: 'Local Authorities received your report!',
                 ),
-                const MyTimeLineTile(
+                MyTimeLineTile(
                   isFirst: false,
                   isLast: false,
                   isPast: true,
+                  date: widget.report.shortFormattedDate(
+                      widget.report.formattedDateOfReporting),
                   eventText: 'The report is being verified',
                 ),
               ],

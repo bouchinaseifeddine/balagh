@@ -1,13 +1,16 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/admin/reports/report_card.dart';
+import 'package:balagh/features/authorities/reports/report_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
+import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ReportsView extends StatefulWidget {
-  const ReportsView({super.key});
+  const ReportsView({super.key, required this.user});
+
+  final appUser? user;
 
   @override
   State<ReportsView> createState() => _ReportsViewState();
@@ -26,7 +29,7 @@ class _ReportsViewState extends State<ReportsView> {
                 _selectedTab = 1;
               });
             },
-            child: Text('Pending',
+            child: Text('Reported',
                 style: TextStyle(
                     color: _selectedTab == 1 ? kMidtBlue : kDarkGrey,
                     fontSize: 18,
@@ -38,23 +41,12 @@ class _ReportsViewState extends State<ReportsView> {
                 _selectedTab = 2;
               });
             },
-            child: Text('Reported',
+            child: Text('Fixed',
                 style: TextStyle(
                     color: _selectedTab == 2 ? kMidtBlue : kDarkGrey,
                     fontSize: 18,
                     fontWeight: FontWeight.w600))),
         SizedBox(width: SizeConfig.defaultSize),
-        TextButton(
-            onPressed: () {
-              setState(() {
-                _selectedTab = 3;
-              });
-            },
-            child: Text('Fixed',
-                style: TextStyle(
-                    color: _selectedTab == 3 ? kMidtBlue : kDarkGrey,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600))),
       ]),
       SizedBox(height: SizeConfig.defaultSize),
       Expanded(
@@ -87,21 +79,68 @@ class _ReportsViewState extends State<ReportsView> {
 
   Future<List<Report>> fetchReports() async {
     final QuerySnapshot<Map<String, dynamic>> snapshot;
+    print('user role ${_selectedTab}');
     if (_selectedTab == 1) {
-      snapshot = await FirebaseFirestore.instance
-          .collection('reports')
-          .where('currentState', isEqualTo: 'pending')
-          .get();
-    } else if (_selectedTab == 2) {
-      snapshot = await FirebaseFirestore.instance
-          .collection('reports')
-          .where('currentState', isEqualTo: 'reported')
-          .get();
+      if (widget.user!.role == 'Town hall') {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'reported')
+            .where('type',
+                whereIn: ['Pothole', 'Garbage', 'Street Light', 'Graffiti'])
+            .orderBy('isurgent', descending: true)
+            .get();
+      } else if (widget.user!.role == 'Sonelgaz') {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'reported')
+            .where('type', whereIn: [
+              'Gas Outage',
+              'Power Outage',
+              'Electricity Leak',
+              'Gas Leak'
+            ])
+            .orderBy('isurgent', descending: true)
+            .get();
+        print('ddd');
+      } else {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'reported')
+            .where('type',
+                whereIn: ['Water Leak', 'Water Pollution', 'Water Outage'])
+            .orderBy('isurgent', descending: true)
+            .get();
+      }
     } else {
-      snapshot = await FirebaseFirestore.instance
-          .collection('reports')
-          .where('currentState', isEqualTo: 'fixed')
-          .get();
+      if (widget.user!.role == 'Town hall') {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'fixed')
+            .where('type',
+                whereIn: ['Pothole', 'Garbage', 'Street Light', 'Graffiti'])
+            .orderBy('isurgent', descending: true)
+            .get();
+      } else if (widget.user!.role == 'sonalgaz') {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'fixed')
+            .where('type', whereIn: [
+              'Gas Outage',
+              'Power Outage',
+              'Electricity Leak',
+              'Gas Leak'
+            ])
+            .orderBy('isurgent', descending: true)
+            .get();
+      } else {
+        snapshot = await FirebaseFirestore.instance
+            .collection('reports')
+            .where('currentState', isEqualTo: 'fixed')
+            .where('type',
+                whereIn: ['Water Leak', 'Water Pollution', 'Water Outage'])
+            .orderBy('isurgent', descending: true)
+            .get();
+      }
     }
 
     return snapshot.docs.map((doc) {

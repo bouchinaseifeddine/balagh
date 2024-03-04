@@ -1,4 +1,5 @@
 import 'package:balagh/features/admin/admin_navigation.dart';
+import 'package:balagh/features/authorities/authorities_navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -124,9 +125,13 @@ class _SplashViewBodyState extends State<SplashViewBody>
             AsyncSnapshot<DocumentSnapshot> userDataSnapshot) {
           if (userDataSnapshot.connectionState == ConnectionState.waiting) {
             // Return a loading indicator if data is still loading
-            return CircularProgressIndicator();
+            return const Scaffold(
+                body: Center(
+                    child: CircularProgressIndicator(
+              color: kMidtBlue,
+            )));
           } else if (userDataSnapshot.hasError) {
-            // Return an error message if an error occurred
+            print('mochkilaa');
             return Text('Error: ${userDataSnapshot.error}');
           } else {
             final role = userDataSnapshot.data?['role'];
@@ -137,6 +142,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 return const UserNavigation();
               case 'admin':
                 return const AdminNavigation();
+              case 'SEAAL' || 'Sonelgaz' || 'Town hall':
+                return const AuthoritiesNavigation();
               default:
                 return const LoginView();
             }

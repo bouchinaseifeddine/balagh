@@ -123,7 +123,7 @@ class _UserNavigationState extends State<UserNavigation> {
                       'Welcome back',
                       style: TextStyle(
                         color: kDarkBlue,
-                        fontSize: 14,
+                        fontSize: 16,
                       ),
                     ),
                   if (_currentTab == 0)
@@ -187,7 +187,7 @@ class _UserNavigationState extends State<UserNavigation> {
             _openAddReport();
           },
           shape: const CircleBorder(),
-          backgroundColor: kDeepBlue,
+          backgroundColor: kMidtBlue,
           elevation: 0,
           child: const Icon(
             Icons.add,
@@ -202,7 +202,7 @@ class _UserNavigationState extends State<UserNavigation> {
               topRight: Radius.circular(20),
             ),
             color: kWhite,
-            border: Border.all(color: kDarkGrey.withOpacity(0.9), width: 1),
+            border: Border.all(color: kDarkGrey.withOpacity(0.5), width: 1),
           ),
           child: BottomAppBar(
             elevation: 0,
@@ -220,13 +220,13 @@ class _UserNavigationState extends State<UserNavigation> {
                     children: <Widget>[
                       NavbarItem(
                           index: 0,
-                          icon: Icons.home_rounded,
+                          icon: Icons.home_outlined,
                           label: 'Home',
                           currentTab: _currentTab,
                           onTap: navigateToPage),
                       NavbarItem(
                           index: 1,
-                          icon: Icons.groups_rounded,
+                          icon: Icons.groups_outlined,
                           label: 'Community',
                           currentTab: _currentTab,
                           onTap: navigateToPage),
@@ -240,13 +240,13 @@ class _UserNavigationState extends State<UserNavigation> {
                     children: <Widget>[
                       NavbarItem(
                           index: 2,
-                          icon: Icons.location_on_rounded,
+                          icon: Icons.location_on_outlined,
                           label: 'Reports',
                           currentTab: _currentTab,
                           onTap: navigateToPage),
                       NavbarItem(
                           index: 3,
-                          icon: Icons.emoji_events_rounded,
+                          icon: Icons.emoji_events_outlined,
                           label: 'Ranking',
                           currentTab: _currentTab,
                           onTap: navigateToPage),

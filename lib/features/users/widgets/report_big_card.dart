@@ -1,10 +1,12 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
+import 'package:balagh/features/authorities/reports/report_fixing.dart';
 import 'package:balagh/features/users/widgets/report_progress.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
@@ -42,18 +44,35 @@ class _ReportBigCardState extends State<ReportBigCard> {
     return _reporter == null
         ? const Center(child: CircularProgressIndicator(color: kMidtBlue))
         : GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                PageTransition(
-                  duration: const Duration(milliseconds: 300),
-                  type: PageTransitionType.fade,
-                  curve: Curves.easeInOut,
-                  child: ReportProgress(
-                    report: widget.report,
+            onTap: () async {
+              final user = FirebaseAuth.instance.currentUser;
+              if (user != null) {
+                final userDoc = await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                final userRole = userDoc['role'];
+
+                if (!context.mounted) {
+                  return;
+                }
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    duration: const Duration(milliseconds: 300),
+                    type: PageTransitionType.fade,
+                    curve: Curves.easeInOut,
+                    child: userRole == 'user' ||
+                            widget.report.currentState == 'fixed'
+                        ? ReportProgress(
+                            report: widget.report,
+                          )
+                        : ReportFixing(
+                            report: widget.report,
+                          ), // Assuming ReportFixing is the screen for users with a role other than 'user'
                   ),
-                ),
-              );
+                );
+              }
             },
             child: Container(
               height: SizeConfig.defaultSize! * 38,

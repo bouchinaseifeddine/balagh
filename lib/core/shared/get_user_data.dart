@@ -11,14 +11,14 @@ Future<appUser?> getUserData(String userId) async {
       List<String>? likedReports =
           List<String>.from(userData['likedReports'] ?? []);
       return appUser(
-        id: userId,
-        userName: userData['username'] ?? '',
-        email: userData['email'] ?? '',
-        imageUrl: userData['image_url'] ?? '',
-        address: userData['address'] ?? '',
-        role: userData['role'] ?? '',
-        likedReports: likedReports,
-      );
+          id: userId,
+          userName: userData['username'] ?? '',
+          email: userData['email'] ?? '',
+          imageUrl: userData['image_url'] ?? '',
+          address: userData['address'] ?? '',
+          role: userData['role'] ?? '',
+          likedReports: likedReports,
+          score: userData['score']);
     } else {
       print('User with ID $userId does not exist.');
       return null;

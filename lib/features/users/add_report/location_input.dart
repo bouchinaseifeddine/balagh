@@ -106,11 +106,13 @@ class _LocationInputState extends State<LocationInput> {
         style: Theme.of(context).textTheme.bodyLarge!);
 
     if (_pickedLocation != null) {
-      previewContent = Image.network(
-        locationImage,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+      previewContent = ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.network(
+          locationImage,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        ),
       );
     }
 
@@ -127,7 +129,7 @@ class _LocationInputState extends State<LocationInput> {
           decoration: BoxDecoration(
               color: kWhite,
               border: Border.all(color: kDarkGrey.withOpacity(0.7), width: 1),
-              borderRadius: const BorderRadius.all(Radius.circular(8))),
+              borderRadius: const BorderRadius.all(Radius.circular(24))),
           child: previewContent,
         ),
         TextButton.icon(

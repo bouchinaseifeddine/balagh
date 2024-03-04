@@ -1,10 +1,12 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
+import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
 import 'package:balagh/features/users/widgets/report_card.dart';
 import 'package:balagh/features/users/widgets/report_big_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
+import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,147 +23,172 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   String? userReportId;
   Report? userReport;
+  appUser? user;
+
   List<Report> nearbyReports = [];
   @override
   void initState() {
     super.initState();
     fetchUserReport();
     fetchNearbyReports();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    try {
+      final userAuthenticated = FirebaseAuth.instance.currentUser!;
+      user = await getUserData(userAuthenticated.uid);
+      setState(() {});
+    } catch (error) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: SizeConfig.defaultSize! * 8.5,
-              margin: EdgeInsets.only(
-                top: SizeConfig.defaultSize! * 2,
-              ),
-              decoration: BoxDecoration(
-                color: kWhite,
-                border: Border.all(color: kDarkGrey.withOpacity(0.4), width: 1),
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+    return user == null
+        ? const Center(
+            child: CircularProgressIndicator(
+              color: kDarkBlue,
+            ),
+          )
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  const Icon(
-                    Icons.auto_awesome_outlined,
-                    color: kDarkBlue,
+                  Container(
+                    height: SizeConfig.defaultSize! * 8.5,
+                    margin: EdgeInsets.only(
+                      top: SizeConfig.defaultSize! * 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: kWhite,
+                      border: Border.all(
+                          color: kDarkGrey.withOpacity(0.4), width: 1),
+                      borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.auto_awesome_outlined,
+                          color: kDarkBlue,
+                        ),
+                        SizedBox(width: SizeConfig.defaultSize! * 2),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              user!.score.toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: kDarkBlue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            Text(
+                              'Points',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: kDarkGrey,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: SizeConfig.defaultSize! * 4),
+                        CustomButton(
+                          onTap: () {
+                            widget.navigateToPage(3);
+                          },
+                          color: kWhite,
+                          fontSize: 14,
+                          text: 'View Ranking',
+                          backgroundColor: kMidtBlue,
+                          width: SizeConfig.defaultSize! * 17,
+                          height: 40,
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(width: SizeConfig.defaultSize! * 1.5),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  SizedBox(height: SizeConfig.defaultSize! * 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '2k points earned',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: kDarkBlue,
+                        'My Reports',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Colors.black87,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
+                      InkWell(
+                        onTap: () {
+                          widget.navigateToPage(2);
+                        },
+                        child: Text(
+                          'See all',
+                          style:
+                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                                    color: Colors.black87,
+                                  ),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: SizeConfig.defaultSize! * 2),
+                  if (userReport != null) ReportBigCard(report: userReport!),
+                  if (userReport == null)
+                    SizedBox(
+                      height: SizeConfig.defaultSize! * 10,
+                      child: const Center(
+                        child: Text(
+                          'No report found, Start adding some',
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: SizeConfig.defaultSize! * 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                       Text(
-                        'Top 100',
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: kDarkGrey,
+                        'Nearby Reports',
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold,
                             ),
                       ),
                     ],
                   ),
-                  SizedBox(width: SizeConfig.defaultSize! * 1.5),
-                  CustomButton(
-                    onTap: () {
-                      widget.navigateToPage(3);
-                    },
-                    color: kWhite,
-                    fontSize: 14,
-                    text: 'View Ranking',
-                    backgroundColor: kMidtBlue,
-                    width: SizeConfig.defaultSize! * 17,
-                    height: 40,
-                  ),
+                  SizedBox(height: SizeConfig.defaultSize! * 1),
+                  if (nearbyReports.isNotEmpty)
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: nearbyReports.length,
+                      itemBuilder: (context, index) {
+                        return ReportCard(report: nearbyReports[index]);
+                      },
+                    ),
+                  if (nearbyReports.isEmpty)
+                    SizedBox(
+                      height: SizeConfig.defaultSize! * 10,
+                      child: const Center(
+                        child: Text(
+                          'No Nearby Reports found.',
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
-            SizedBox(height: SizeConfig.defaultSize! * 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'My Reports',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: kDarkBlue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                InkWell(
-                  onTap: () {
-                    widget.navigateToPage(2);
-                  },
-                  child: Text(
-                    'See all',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: kDarkBlue,
-                        ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(height: SizeConfig.defaultSize! * 2),
-            if (userReport != null) ReportBigCard(report: userReport!),
-            if (userReport == null)
-              SizedBox(
-                height: SizeConfig.defaultSize! * 10,
-                child: const Center(
-                  child: Text(
-                    'No report found, Start adding some',
-                  ),
-                ),
-              ),
-            SizedBox(height: SizeConfig.defaultSize! * 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Nearby Reports',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: kDarkBlue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-              ],
-            ),
-            SizedBox(height: SizeConfig.defaultSize! * 1),
-            if (nearbyReports.isNotEmpty)
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: nearbyReports.length,
-                itemBuilder: (context, index) {
-                  return ReportCard(report: nearbyReports[index]);
-                },
-              ),
-            if (nearbyReports.isEmpty)
-              SizedBox(
-                height: SizeConfig.defaultSize! * 10,
-                child: const Center(
-                  child: Text(
-                    'No Nearby Reports found.',
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Future<void> fetchUserReport() async {
@@ -180,9 +207,11 @@ class _HomeViewState extends State<HomeView> {
                 type: userSnapshot.docs.first['type'],
                 description: userSnapshot.docs.first['description'],
                 firstImage: userSnapshot.docs.first['firstimageUrl'],
+                secondImage: userSnapshot.docs.first['secondimageUrl'],
                 isUrgent: userSnapshot.docs.first['isurgent'],
                 dateOfReporting:
                     userSnapshot.docs.first['reportingdate'].toDate(),
+                dateOfFixing: userSnapshot.docs.first['fixingdate'].toDate(),
                 location: ReportLocation(
                     adress: userSnapshot.docs.first['adress'],
                     latitude: userSnapshot.docs.first['location'].latitude,
@@ -208,6 +237,7 @@ class _HomeViewState extends State<HomeView> {
             .collection('reports')
             .where('currentState', isEqualTo: 'reported')
             .where('userid', isNotEqualTo: userId)
+            .limit(3)
             .get();
 
         if (reportsSnapShots.docs.isNotEmpty) {
@@ -218,8 +248,10 @@ class _HomeViewState extends State<HomeView> {
                   type: doc['type'],
                   description: doc['description'],
                   firstImage: doc['firstimageUrl'],
+                  secondImage: doc['secondimageUrl'],
                   isUrgent: doc['isurgent'],
                   dateOfReporting: doc['reportingdate'].toDate(),
+                  dateOfFixing: doc['fixingdate'].toDate(),
                   location: ReportLocation(
                       adress: doc['adress'],
                       latitude: doc['location'].latitude,

@@ -56,8 +56,10 @@ class ReportsView extends StatelessWidget {
         type: doc['type'],
         description: doc['description'],
         firstImage: doc['firstimageUrl'],
+        secondImage: doc['secondimageUrl'],
         isUrgent: doc['isurgent'],
         dateOfReporting: doc['reportingdate'].toDate(),
+        dateOfFixing: doc['fixingdate'].toDate(),
         location: ReportLocation(
             adress: doc['adress'],
             latitude: doc['location'].latitude,

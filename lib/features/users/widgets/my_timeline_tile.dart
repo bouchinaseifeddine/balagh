@@ -4,23 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class MyTimeLineTile extends StatelessWidget {
-  const MyTimeLineTile(
+  MyTimeLineTile(
       {super.key,
       required this.isFirst,
       required this.isLast,
       required this.isPast,
+      this.date,
       required this.eventText});
 
   final bool isFirst;
   final bool isLast;
   final bool isPast;
   final String eventText;
+  String? date;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       // for the gap
+
       height: SizeConfig.defaultSize! * 9,
       child: TimelineTile(
+        alignment: TimelineAlign.center,
+        startChild: Container(
+          margin: const EdgeInsets.only(right: 10),
+          child: isPast
+              ? Text(
+                  date!.toUpperCase(),
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(
+                      color: kMidtBlue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                )
+              : null,
+        ),
         isFirst: isFirst,
         isLast: isLast,
         beforeLineStyle: LineStyle(
@@ -45,7 +62,7 @@ class MyTimeLineTile extends StatelessWidget {
                 : const TextStyle(
                     color: kMidtBlue,
                     fontWeight: FontWeight.bold,
-                    fontSize: 20),
+                    fontSize: 16),
           ),
         ),
       ),

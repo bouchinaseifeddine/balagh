@@ -1,5 +1,6 @@
 import 'package:balagh/features/admin/admin_navigation.dart';
 import 'package:balagh/features/auth/presentation/forget_password_view.dart';
+import 'package:balagh/features/authorities/authorities_navigation.dart';
 import 'package:balagh/features/users/user_navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -134,6 +135,9 @@ class _LoginScreenState extends State<LoginView> {
       case 'admin':
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (ctx) => const AdminNavigation()));
+      case 'SEAAL' || 'Sonelgaz' || 'Town hall':
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (ctx) => const AuthoritiesNavigation()));
       default:
     }
   }
