@@ -145,7 +145,6 @@ class _ProfilViewState extends State<ProfileView> {
 
       totalComments = commentsSnapShot.size;
       totalReports = reportsSnapShot.size;
-      print('total $totalComments');
       return true;
     } catch (error) {
       print('Error fetching data: $error');

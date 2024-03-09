@@ -22,6 +22,7 @@ class ReportBigCard extends StatefulWidget {
 class _ReportBigCardState extends State<ReportBigCard> {
   var _isLiked = false;
   late DocumentReference _reportRef;
+  int totalLikes = 0;
   appUser? _reporter;
   appUser? user;
 
@@ -32,6 +33,8 @@ class _ReportBigCardState extends State<ReportBigCard> {
         .collection('reports')
         .doc(widget.report.reportId);
     getReporterData();
+    getTotalLikes();
+    checkIfLiked();
   }
 
   void getReporterData() async {
@@ -39,8 +42,66 @@ class _ReportBigCardState extends State<ReportBigCard> {
     setState(() {});
   }
 
+  void checkIfLiked() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final likesSnapshot = await FirebaseFirestore.instance
+          .collection('likes')
+          .where('userId', isEqualTo: user.uid)
+          .where('reportId', isEqualTo: widget.report.reportId)
+          .get();
+      setState(() {
+        _isLiked = likesSnapshot.docs.isNotEmpty;
+      });
+    }
+  }
+
+  void getTotalLikes() async {
+    final likeQuery = await FirebaseFirestore.instance
+        .collection('likes')
+        .where('reportId', isEqualTo: widget.report.reportId)
+        .get();
+    setState(() {
+      totalLikes = likeQuery.docs.length;
+      print('totallikes f get: $totalLikes');
+    });
+  }
+
+  void tapLike() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (_isLiked) {
+        await FirebaseFirestore.instance
+            .collection('likes')
+            .where('userId', isEqualTo: user.uid)
+            .where('reportId', isEqualTo: widget.report.reportId)
+            .get()
+            .then((querySnapshot) {
+          for (var doc in querySnapshot.docs) {
+            doc.reference.delete();
+          }
+        });
+        setState(() {
+          _isLiked = !_isLiked;
+          totalLikes -= 1;
+        });
+      } else {
+        // Add like
+        await FirebaseFirestore.instance.collection('likes').add({
+          'userId': user.uid,
+          'reportId': widget.report.reportId,
+        });
+        setState(() {
+          _isLiked = !_isLiked;
+          totalLikes += 1;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('totallikes f build: $totalLikes');
     return _reporter == null
         ? const Center(child: CircularProgressIndicator(color: kMidtBlue))
         : GestureDetector(
@@ -69,7 +130,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                           )
                         : ReportFixing(
                             report: widget.report,
-                          ), // Assuming ReportFixing is the screen for users with a role other than 'user'
+                          ),
                   ),
                 );
               }
@@ -156,23 +217,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  if (_isLiked) {
-                                    _reportRef.update(
-                                        {'likes': FieldValue.increment(-1)});
-                                    widget.report.likes =
-                                        widget.report.likes - 1;
-                                    setState(() {
-                                      _isLiked = false;
-                                    });
-                                  } else {
-                                    _reportRef.update(
-                                        {'likes': FieldValue.increment(1)});
-                                    widget.report.likes =
-                                        widget.report.likes + 1;
-                                    setState(() {
-                                      _isLiked = true;
-                                    });
-                                  }
+                                  tapLike();
                                 },
                                 child: AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 300),
@@ -185,7 +230,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                                   },
                                   child: Icon(
                                     color: kMidtBlue,
-                                    size: 30,
+                                    size: 32,
                                     _isLiked
                                         ? Ionicons.flame
                                         : Ionicons.flame_outline,
@@ -193,7 +238,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                                   ),
                                 ),
                               ),
-                              Text('${widget.report.likes}')
+                              Text('$totalLikes')
                             ],
                           )
                         ],
