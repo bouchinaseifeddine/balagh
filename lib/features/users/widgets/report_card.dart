@@ -2,14 +2,48 @@ import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
 import 'package:balagh/features/users/widgets/report_comments.dart';
 import 'package:balagh/model/report.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:page_transition/page_transition.dart';
 
-class ReportCard extends StatelessWidget {
+class ReportCard extends StatefulWidget {
   const ReportCard({super.key, required this.report});
 
   final Report report;
+
+  @override
+  State<ReportCard> createState() => _ReportCardState();
+}
+
+class _ReportCardState extends State<ReportCard> {
+  int totalComments = 0;
+  int totalSupports = 0;
+  @override
+  void initState() {
+    super.initState();
+    fetchSatatistics();
+  }
+
+  void fetchSatatistics() async {
+    final QuerySnapshot<Map<String, dynamic>> commentsSnapShot =
+        await FirebaseFirestore.instance
+            .collection('comments')
+            .where('reportId', isEqualTo: widget.report.reportId)
+            .get();
+
+    final QuerySnapshot<Map<String, dynamic>> supportsSnapShot =
+        await FirebaseFirestore.instance
+            .collection('likes')
+            .where('reportId', isEqualTo: widget.report.reportId)
+            .get();
+
+    setState(() {
+      totalComments = commentsSnapShot.size;
+      totalSupports = supportsSnapShot.size;
+    });
+    print('total $totalComments');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +56,7 @@ class ReportCard extends StatelessWidget {
             type: PageTransitionType.fade,
             curve: Curves.easeInOut,
             child: ReportCommentsView(
-              report: report,
+              report: widget.report,
             ),
           ),
         );
@@ -44,7 +78,7 @@ class ReportCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.network(
-                    report.firstImage,
+                    widget.report.firstImage,
                     fit: BoxFit.fill,
                     height: double.infinity,
                     width: (SizeConfig.screenWidth! - 80) / 3.2,
@@ -60,7 +94,7 @@ class ReportCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            report.type,
+                            widget.report.type,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -70,7 +104,7 @@ class ReportCard extends StatelessWidget {
                                     fontSize: 18),
                           ),
                           Text(
-                            report.location!.adress,
+                            widget.report.location!.adress,
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium!
@@ -91,7 +125,7 @@ class ReportCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                '${report.likes}',
+                                totalSupports.toString(),
                                 style: const TextStyle(color: kMidtBlue),
                               )
                             ],
@@ -104,9 +138,7 @@ class ReportCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 5),
                               Text(
-                                '${report.comments?.length}' == 'null'
-                                    ? '0'
-                                    : '${report.comments?.length}',
+                                totalComments.toString(),
                                 style: const TextStyle(color: kMidtBlue),
                               )
                             ],
@@ -118,7 +150,7 @@ class ReportCard extends StatelessWidget {
                 ),
                 SizedBox(width: SizeConfig.defaultSize! * 3),
                 Icon(
-                  stateIcons[report.currentState],
+                  stateIcons[widget.report.currentState],
                   size: 32,
                   color: kMidtBlue,
                 )
