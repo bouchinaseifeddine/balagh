@@ -30,7 +30,8 @@ class _ProfilViewState extends State<ProfileView> {
   String? _entredUserName;
   String? _entredAdress;
   int totalReports = 0;
-  var totalComments;
+  int totalSupports = 0;
+  int totalComments = 0;
   var lightmode = true;
 
   // used to hide the keyboard when the user press submit
@@ -143,8 +144,15 @@ class _ProfilViewState extends State<ProfileView> {
               .where('userid', isEqualTo: userAuthenticated.uid)
               .get();
 
+      final QuerySnapshot<Map<String, dynamic>> supportsSnapShot =
+          await FirebaseFirestore.instance
+              .collection('likes')
+              .where('userId', isEqualTo: userAuthenticated.uid)
+              .get();
+
       totalComments = commentsSnapShot.size;
       totalReports = reportsSnapShot.size;
+      totalSupports = supportsSnapShot.size;
       return true;
     } catch (error) {
       print('Error fetching data: $error');
@@ -319,7 +327,7 @@ class _ProfilViewState extends State<ProfileView> {
                                   Column(
                                     children: [
                                       Text(
-                                        '92',
+                                        totalSupports.toString(),
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyLarge!

@@ -63,7 +63,6 @@ class _ReportBigCardState extends State<ReportBigCard> {
         .get();
     setState(() {
       totalLikes = likeQuery.docs.length;
-      print('totallikes f get: $totalLikes');
     });
   }
 
@@ -101,7 +100,6 @@ class _ReportBigCardState extends State<ReportBigCard> {
 
   @override
   Widget build(BuildContext context) {
-    print('totallikes f build: $totalLikes');
     return _reporter == null
         ? const Center(child: CircularProgressIndicator(color: kMidtBlue))
         : GestureDetector(
