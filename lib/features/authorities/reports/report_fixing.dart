@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/add_report/image_input.dart';
+import 'package:balagh/features/users/widgets/image_input.dart';
 import 'package:balagh/model/report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -43,7 +43,7 @@ class _ReportFixingState extends State<ReportFixing> {
                 Navigator.of(context).pop();
                 Navigator.of(ctx).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

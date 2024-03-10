@@ -2,14 +2,16 @@ import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
 import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/report_card.dart';
-import 'package:balagh/features/users/widgets/report_big_card.dart';
+import 'package:balagh/core/shared/report_card.dart';
+import 'package:balagh/core/shared/report_big_card.dart';
+import 'package:balagh/core/shared/report_comments.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key, required this.navigateToPage});
@@ -173,7 +175,22 @@ class _HomeViewState extends State<HomeView> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: nearbyReports.length,
                       itemBuilder: (context, index) {
-                        return ReportCard(report: nearbyReports[index]);
+                        return ReportCard(
+                          report: nearbyReports[index],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                duration: const Duration(milliseconds: 300),
+                                type: PageTransitionType.fade,
+                                curve: Curves.easeInOut,
+                                child: ReportCommentsView(
+                                  report: nearbyReports[index],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                     ),
                   if (nearbyReports.isEmpty)

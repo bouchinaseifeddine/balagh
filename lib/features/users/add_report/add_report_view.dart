@@ -4,8 +4,8 @@ import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/data/categories.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/add_report/image_input.dart';
-import 'package:balagh/features/users/add_report/location_input.dart';
+import 'package:balagh/features/users/widgets/image_input.dart';
+import 'package:balagh/features/users/widgets/location_input.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,7 +71,7 @@ class _AddReportViewState extends State<AddReportView> {
                 Navigator.of(context).pop();
                 Navigator.of(ctx).pop();
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );

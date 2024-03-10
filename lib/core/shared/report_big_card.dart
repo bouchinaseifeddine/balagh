@@ -2,7 +2,7 @@ import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/utils/size_config.dart';
 import 'package:balagh/features/authorities/reports/report_fixing.dart';
-import 'package:balagh/features/users/widgets/report_progress.dart';
+import 'package:balagh/core/shared/report_progress.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,7 +21,6 @@ class ReportBigCard extends StatefulWidget {
 
 class _ReportBigCardState extends State<ReportBigCard> {
   var _isLiked = false;
-  late DocumentReference _reportRef;
   int totalLikes = 0;
   appUser? _reporter;
   appUser? user;
@@ -29,9 +28,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
   @override
   void initState() {
     super.initState();
-    _reportRef = FirebaseFirestore.instance
-        .collection('reports')
-        .doc(widget.report.reportId);
+
     getReporterData();
     getTotalLikes();
     checkIfLiked();

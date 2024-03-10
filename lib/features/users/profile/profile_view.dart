@@ -10,7 +10,7 @@ import 'package:balagh/core/shared/custom_buttons.dart';
 import 'package:balagh/core/shared/get_user_data.dart';
 import 'package:balagh/core/shared/sign_out.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/profile/user_image_picker.dart';
+import 'package:balagh/features/users/widgets/user_image_picker.dart';
 import 'package:balagh/model/user.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ionicons/ionicons.dart';

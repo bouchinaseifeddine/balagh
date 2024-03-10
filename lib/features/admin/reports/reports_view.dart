@@ -1,10 +1,12 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/admin/reports/report_card.dart';
+import 'package:balagh/features/admin/reports/report_validation.dart';
+import 'package:balagh/core/shared/report_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ReportsView extends StatefulWidget {
   const ReportsView({super.key});
@@ -72,11 +74,26 @@ class _ReportsViewState extends State<ReportsView> {
               return const Center(child: Text('No reports found.'));
             } else {
               final reports = snapshot.data!;
-              return ListView.builder(
-                itemCount: reports.length,
-                itemBuilder: (context, index) {
-                  return ReportCard(report: reports[index]);
-                },
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: ListView.builder(
+                  itemCount: reports.length,
+                  itemBuilder: (context, index) {
+                    return ReportCard(
+                        report: reports[index],
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              duration: const Duration(milliseconds: 300),
+                              type: PageTransitionType.fade,
+                              curve: Curves.easeInOut,
+                              child: ReportValidation(report: reports[index]),
+                            ),
+                          );
+                        });
+                  },
+                ),
               );
             }
           },

@@ -1,8 +1,8 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/comments.dart';
-import 'package:balagh/features/users/widgets/new_comment.dart';
-import 'package:balagh/features/users/widgets/report_big_card.dart';
+import 'package:balagh/core/shared/comments.dart';
+import 'package:balagh/core/shared/new_comment.dart';
+import 'package:balagh/core/shared/report_big_card.dart';
 import 'package:balagh/model/report.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';

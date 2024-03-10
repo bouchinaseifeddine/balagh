@@ -1,6 +1,6 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/my_timeline_tile.dart';
+import 'package:balagh/core/shared/my_timeline_tile.dart';
 import 'package:balagh/model/report.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';

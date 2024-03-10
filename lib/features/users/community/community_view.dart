@@ -1,10 +1,12 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/report_card.dart';
+import 'package:balagh/core/shared/report_card.dart';
+import 'package:balagh/core/shared/report_comments.dart';
 import 'package:balagh/model/report.dart';
 import 'package:balagh/model/report_location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class CommunityView extends StatefulWidget {
   const CommunityView({super.key});
@@ -65,7 +67,22 @@ class _CommunityViewState extends State<CommunityView> {
                 child: ListView.builder(
                   itemCount: reports.length,
                   itemBuilder: (context, index) {
-                    return ReportCard(report: reports[index]);
+                    return ReportCard(
+                      report: reports[index],
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: const Duration(milliseconds: 300),
+                            type: PageTransitionType.fade,
+                            curve: Curves.easeInOut,
+                            child: ReportCommentsView(
+                              report: reports[index],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
               );

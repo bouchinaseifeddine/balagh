@@ -1,4 +1,3 @@
-import 'package:balagh/features/admin/accounts/accounts_view.dart';
 import 'package:balagh/features/authorities/reports/reports_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +19,6 @@ class AuthoritiesNavigation extends StatefulWidget {
 }
 
 class _AuthoritiesNavigationState extends State<AuthoritiesNavigation> {
-  int _currentTab = 0;
   appUser? user;
 
   @override

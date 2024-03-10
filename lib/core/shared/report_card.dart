@@ -1,16 +1,15 @@
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/utils/size_config.dart';
-import 'package:balagh/features/users/widgets/report_comments.dart';
 import 'package:balagh/model/report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:page_transition/page_transition.dart';
 
 class ReportCard extends StatefulWidget {
-  const ReportCard({super.key, required this.report});
+  const ReportCard({super.key, required this.report, required this.onTap});
 
   final Report report;
+  final void Function() onTap;
 
   @override
   State<ReportCard> createState() => _ReportCardState();
@@ -42,25 +41,12 @@ class _ReportCardState extends State<ReportCard> {
       totalComments = commentsSnapShot.size;
       totalSupports = supportsSnapShot.size;
     });
-    print('total $totalComments');
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          PageTransition(
-            duration: const Duration(milliseconds: 300),
-            type: PageTransitionType.fade,
-            curve: Curves.easeInOut,
-            child: ReportCommentsView(
-              report: widget.report,
-            ),
-          ),
-        );
-      },
+      onTap: widget.onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
