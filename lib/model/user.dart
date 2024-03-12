@@ -6,7 +6,6 @@ class appUser {
   final String address;
   final String role;
   int? score;
-  List<String>? likedReports;
 
   appUser({
     required this.id,
@@ -16,6 +15,5 @@ class appUser {
     required this.address,
     required this.role,
     this.score,
-    this.likedReports,
   });
 }

@@ -19,8 +19,6 @@ class Report {
   var type;
   final String firstImage;
   final String secondImage;
-  var likes;
-  var comments;
   var currentState;
   final bool isUrgent;
 
@@ -35,8 +33,6 @@ class Report {
     required this.firstImage,
     required this.secondImage,
     required this.isUrgent,
-    required this.likes,
-    this.comments,
     required this.currentState,
   });
 

@@ -163,21 +163,21 @@ class _ReportsViewState extends State<ReportsView> {
 
     return snapshot.docs.map((doc) {
       return Report(
-          reportId: doc.id,
-          userId: doc['userid'],
-          type: doc['type'],
-          description: doc['description'],
-          firstImage: doc['firstimageUrl'],
-          secondImage: doc['secondimageUrl'],
-          isUrgent: doc['isurgent'],
-          dateOfReporting: doc['reportingdate'].toDate(),
-          dateOfFixing: doc['fixingdate'].toDate(),
-          location: ReportLocation(
-              adress: doc['adress'],
-              latitude: doc['location'].latitude,
-              longitude: doc['location'].longitude),
-          currentState: doc['currentState'],
-          likes: doc['likes']);
+        reportId: doc.id,
+        userId: doc['userid'],
+        type: doc['type'],
+        description: doc['description'],
+        firstImage: doc['firstimageUrl'],
+        secondImage: doc['secondimageUrl'],
+        isUrgent: doc['isurgent'],
+        dateOfReporting: doc['reportingdate'].toDate(),
+        dateOfFixing: doc['fixingdate'].toDate(),
+        location: ReportLocation(
+            adress: doc['adress'],
+            latitude: doc['location'].latitude,
+            longitude: doc['location'].longitude),
+        currentState: doc['currentState'],
+      );
     }).toList();
   }
 }

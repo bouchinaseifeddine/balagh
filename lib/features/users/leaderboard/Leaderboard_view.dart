@@ -43,7 +43,10 @@ class _LeaderboardViewState extends State<LeaderboardView> {
           .get(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: CircularProgressIndicator(
+            color: kMidtBlue,
+          ));
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');

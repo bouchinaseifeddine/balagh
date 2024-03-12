@@ -217,22 +217,22 @@ class _HomeViewState extends State<HomeView> {
         if (userSnapshot.docs.isNotEmpty) {
           setState(() {
             userReport = Report(
-                reportId: userSnapshot.docs.first.id,
-                userId: userSnapshot.docs.first['userid'],
-                type: userSnapshot.docs.first['type'],
-                description: userSnapshot.docs.first['description'],
-                firstImage: userSnapshot.docs.first['firstimageUrl'],
-                secondImage: userSnapshot.docs.first['secondimageUrl'],
-                isUrgent: userSnapshot.docs.first['isurgent'],
-                dateOfReporting:
-                    userSnapshot.docs.first['reportingdate'].toDate(),
-                dateOfFixing: userSnapshot.docs.first['fixingdate'].toDate(),
-                location: ReportLocation(
-                    adress: userSnapshot.docs.first['adress'],
-                    latitude: userSnapshot.docs.first['location'].latitude,
-                    longitude: userSnapshot.docs.first['location'].longitude),
-                currentState: userSnapshot.docs.first['currentState'],
-                likes: userSnapshot.docs.first['likes']);
+              reportId: userSnapshot.docs.first.id,
+              userId: userSnapshot.docs.first['userid'],
+              type: userSnapshot.docs.first['type'],
+              description: userSnapshot.docs.first['description'],
+              firstImage: userSnapshot.docs.first['firstimageUrl'],
+              secondImage: userSnapshot.docs.first['secondimageUrl'],
+              isUrgent: userSnapshot.docs.first['isurgent'],
+              dateOfReporting:
+                  userSnapshot.docs.first['reportingdate'].toDate(),
+              dateOfFixing: userSnapshot.docs.first['fixingdate'].toDate(),
+              location: ReportLocation(
+                  adress: userSnapshot.docs.first['adress'],
+                  latitude: userSnapshot.docs.first['location'].latitude,
+                  longitude: userSnapshot.docs.first['location'].longitude),
+              currentState: userSnapshot.docs.first['currentState'],
+            );
           });
         } else {
           setState(() {
@@ -258,21 +258,21 @@ class _HomeViewState extends State<HomeView> {
         if (reportsSnapShots.docs.isNotEmpty) {
           nearbyReports = reportsSnapShots.docs
               .map((doc) => Report(
-                  reportId: doc.id,
-                  userId: doc['userid'],
-                  type: doc['type'],
-                  description: doc['description'],
-                  firstImage: doc['firstimageUrl'],
-                  secondImage: doc['secondimageUrl'],
-                  isUrgent: doc['isurgent'],
-                  dateOfReporting: doc['reportingdate'].toDate(),
-                  dateOfFixing: doc['fixingdate'].toDate(),
-                  location: ReportLocation(
-                      adress: doc['adress'],
-                      latitude: doc['location'].latitude,
-                      longitude: doc['location'].longitude),
-                  currentState: doc['currentState'],
-                  likes: doc['likes']))
+                    reportId: doc.id,
+                    userId: doc['userid'],
+                    type: doc['type'],
+                    description: doc['description'],
+                    firstImage: doc['firstimageUrl'],
+                    secondImage: doc['secondimageUrl'],
+                    isUrgent: doc['isurgent'],
+                    dateOfReporting: doc['reportingdate'].toDate(),
+                    dateOfFixing: doc['fixingdate'].toDate(),
+                    location: ReportLocation(
+                        adress: doc['adress'],
+                        latitude: doc['location'].latitude,
+                        longitude: doc['location'].longitude),
+                    currentState: doc['currentState'],
+                  ))
               .toList();
           setState(() {});
         } else {

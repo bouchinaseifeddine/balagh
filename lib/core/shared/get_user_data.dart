@@ -17,7 +17,6 @@ Future<appUser?> getUserData(String userId) async {
           imageUrl: userData['image_url'] ?? '',
           address: userData['address'] ?? '',
           role: userData['role'] ?? '',
-          likedReports: likedReports,
           score: userData['score']);
     } else {
       print('User with ID $userId does not exist.');

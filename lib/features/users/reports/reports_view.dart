@@ -81,7 +81,6 @@ class ReportsView extends StatelessWidget {
             latitude: doc['location'].latitude,
             longitude: doc['location'].longitude),
         currentState: doc['currentState'],
-        likes: doc['likes'],
       );
     }).toList();
   }
