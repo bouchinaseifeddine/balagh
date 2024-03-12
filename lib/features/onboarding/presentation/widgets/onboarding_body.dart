@@ -19,7 +19,7 @@ class OnBoardingBody extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           PageTransition(
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 350),
             type: PageTransitionType.rightToLeft,
             curve: Curves.easeInOut,
             child: const AuthView(),

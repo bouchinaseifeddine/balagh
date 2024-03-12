@@ -127,6 +127,8 @@ class _LoginScreenState extends State<LoginView> {
     if (!context.mounted) {
       return;
     }
+
+    // display different UI depanding on the user role
     switch (role) {
       case 'user':
         Navigator.of(context).pushReplacement(
