@@ -10,7 +10,7 @@ import 'package:balagh/features/users/add_report/add_report_view.dart';
 import 'package:balagh/features/users/community/community_view.dart';
 import 'package:balagh/features/users/home/home_view.dart';
 import 'package:balagh/features/users/profile/profile_view.dart';
-import 'package:balagh/features/users/ranking/ranking_view.dart';
+import 'package:balagh/features/users/leaderboard/Leaderboard_view.dart';
 import 'package:balagh/features/users/reports/reports_view.dart';
 import 'package:balagh/features/users/widgets/navbar_item.dart';
 import 'package:balagh/model/user.dart';
@@ -73,7 +73,7 @@ class _UserNavigationState extends State<UserNavigation> {
       case 2:
         return 'Reports';
       case 3:
-        return 'Ranking';
+        return 'Leaderboard';
       default:
         return '';
     }
@@ -85,7 +85,7 @@ class _UserNavigationState extends State<UserNavigation> {
       HomeView(navigateToPage: navigateToPage),
       const CommunityView(),
       const ReportsView(),
-      const RankingView(),
+      const LeaderboardView(),
     ];
 
     SizeConfig().init;
@@ -139,7 +139,7 @@ class _UserNavigationState extends State<UserNavigation> {
                     Text(
                       _getTabName(_currentTab),
                       style: const TextStyle(
-                        color: kMidtBlue,
+                        color: kBlack,
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
@@ -194,66 +194,52 @@ class _UserNavigationState extends State<UserNavigation> {
             color: kWhite,
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterDocked,
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            margin:
+                const EdgeInsets.only(right: 12, left: 12, bottom: 20, top: 10),
+            height: 75,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
+              color: kWhite,
+              border: Border.all(color: kDarkGrey.withOpacity(0.5), width: 1),
+              boxShadow: [
+                BoxShadow(
+                  color: kMidtBlue.withOpacity(0.3),
+                  offset: const Offset(0, 10),
+                  blurRadius: 15,
+                ), // BoxShadow
+              ],
             ),
-            color: kWhite,
-            border: Border.all(color: kDarkGrey.withOpacity(0.5), width: 1),
-          ),
-          child: BottomAppBar(
-            elevation: 0,
-            color: Colors.transparent,
-            height: 80,
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 10,
-            child: SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      NavbarItem(
-                          index: 0,
-                          icon: Icons.home_outlined,
-                          label: 'Home',
-                          currentTab: _currentTab,
-                          onTap: navigateToPage),
-                      NavbarItem(
-                          index: 1,
-                          icon: Icons.groups_outlined,
-                          label: 'Community',
-                          currentTab: _currentTab,
-                          onTap: navigateToPage),
-                    ],
-                  ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                NavbarItem(
+                    index: 0,
+                    icon: Icons.home_outlined,
+                    currentTab: _currentTab,
+                    onTap: navigateToPage),
+                NavbarItem(
+                    index: 1,
+                    icon: Icons.groups_outlined,
+                    currentTab: _currentTab,
+                    onTap: navigateToPage),
 
-                  // Right Tab bar icons
+                // Right Tab bar icons
 
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      NavbarItem(
-                          index: 2,
-                          icon: Icons.location_on_outlined,
-                          label: 'Reports',
-                          currentTab: _currentTab,
-                          onTap: navigateToPage),
-                      NavbarItem(
-                          index: 3,
-                          icon: Icons.emoji_events_outlined,
-                          label: 'Ranking',
-                          currentTab: _currentTab,
-                          onTap: navigateToPage),
-                    ],
-                  ),
-                ],
-              ),
+                NavbarItem(
+                    index: 2,
+                    icon: Icons.location_on_outlined,
+                    currentTab: _currentTab,
+                    onTap: navigateToPage),
+                NavbarItem(
+                    index: 3,
+                    icon: Icons.emoji_events_outlined,
+                    currentTab: _currentTab,
+                    onTap: navigateToPage),
+              ],
             ),
           ),
         ),

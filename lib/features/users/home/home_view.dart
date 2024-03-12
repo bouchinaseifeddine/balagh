@@ -125,7 +125,6 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         'My Reports',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.black87,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -135,10 +134,10 @@ class _HomeViewState extends State<HomeView> {
                         },
                         child: Text(
                           'See all',
-                          style:
-                              Theme.of(context).textTheme.titleSmall!.copyWith(
-                                    color: Colors.black87,
-                                  ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(),
                         ),
                       )
                     ],
@@ -162,7 +161,6 @@ class _HomeViewState extends State<HomeView> {
                       Text(
                         'Nearby Reports',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.black87,
                               fontWeight: FontWeight.bold,
                             ),
                       ),

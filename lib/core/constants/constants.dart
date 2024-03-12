@@ -5,9 +5,10 @@ const kDeepBlue = Color(0xFF1B263B);
 const kMidtBlue = Color(0xFF415A77);
 // const kMidtBlue = Color(0xFF47466D);
 const kLightBlue = Color(0xFF778DA9);
+const kBlack = Colors.black87;
 const kGold = Color(0xFFD5B454);
-// const kBackgroundColor = Color.fromARGB(255, 228, 228, 228);
-const kBackgroundColor = Color.fromARGB(255, 240, 243, 247);
+const kBackgroundColor = Color.fromARGB(255, 240, 240, 240);
+// const kBackgroundColor = Color.fromARGB(255, 240, 243, 247);
 
 const kDarkGrey = Color(0xFF828383);
 const kLightGrey = Color(0xFFE3E3E3);

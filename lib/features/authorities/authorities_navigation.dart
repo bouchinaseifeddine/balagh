@@ -76,7 +76,7 @@ class _AuthoritiesNavigationState extends State<AuthoritiesNavigation> {
                   Text(
                     'Reports',
                     style: TextStyle(
-                      color: kMidtBlue,
+                      color: kBlack,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),

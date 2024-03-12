@@ -7,14 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class RankingView extends StatefulWidget {
-  const RankingView({super.key});
+class LeaderboardView extends StatefulWidget {
+  const LeaderboardView({super.key});
 
   @override
-  State<RankingView> createState() => _RankingViewState();
+  State<LeaderboardView> createState() => _LeaderboardViewState();
 }
 
-class _RankingViewState extends State<RankingView> {
+class _LeaderboardViewState extends State<LeaderboardView> {
   @override
   void initState() {
     // TODO: implement initState
@@ -166,7 +166,7 @@ class _RankingViewState extends State<RankingView> {
   }
 
   Widget _buildTopThree(context, users) {
-    return Container(
+    return SizedBox(
       height: 300,
       child: Stack(
         children: [

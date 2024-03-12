@@ -227,6 +227,7 @@ class _ReportValidationState extends State<ReportValidation> {
                           widget.report.userId,
                           style: const TextStyle(
                             color: kMidtBlue,
+                            fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -240,7 +241,7 @@ class _ReportValidationState extends State<ReportValidation> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          widget.report.dateOfReporting.toString(),
+                          widget.report.formattedDateOfReporting.toString(),
                           style: const TextStyle(
                             color: kMidtBlue,
                             fontWeight: FontWeight.w500,
@@ -262,20 +263,6 @@ class _ReportValidationState extends State<ReportValidation> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        const Text('Likes:',
-                            style: TextStyle(color: kDarkBlue)),
-                        const SizedBox(width: 8),
-                        Text(
-                          widget.report.likes.toString(),
-                          style: const TextStyle(
-                            color: kMidtBlue,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),

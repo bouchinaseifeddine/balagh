@@ -32,7 +32,8 @@ class _ProfilViewState extends State<ProfileView> {
   int totalReports = 0;
   int totalSupports = 0;
   int totalComments = 0;
-  var lightmode = true;
+
+  var isLightmode = false;
 
   // used to hide the keyboard when the user press submit
   final FocusNode _focusNode = FocusNode();
@@ -163,6 +164,7 @@ class _ProfilViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init;
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -171,42 +173,18 @@ class _ProfilViewState extends State<ProfileView> {
           },
           child: const Icon(
             Ionicons.arrow_undo,
-            color: kMidtBlue,
+            color: kBlack,
             size: 26,
           ),
         ),
         title: Text(
           'Profile',
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: kMidtBlue, fontWeight: FontWeight.bold, fontSize: 26),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: SizeConfig.defaultSize! * 1.5),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  lightmode = !lightmode;
-                });
-              },
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                transitionBuilder: (child, animation) {
-                  return ScaleTransition(
-                    scale: Tween(begin: 0.0, end: 1.0).animate(animation),
-                    child: child,
-                  );
-                },
-                child: Icon(
-                  color: kMidtBlue,
-                  size: 30,
-                  lightmode ? Ionicons.moon : Ionicons.sunny,
-                  key: ValueKey(lightmode),
-                ),
+                color: kBlack,
+                fontWeight: FontWeight.bold,
+                fontSize: 26,
               ),
-            ),
-          ),
-        ],
+        ),
       ),
       // body:
       body: FutureBuilder(

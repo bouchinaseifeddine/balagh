@@ -107,7 +107,7 @@ class _AdminNavigationState extends State<AdminNavigation> {
                   Text(
                     _getTabName(_currentTab),
                     style: const TextStyle(
-                      color: kMidtBlue,
+                      color: kBlack,
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
@@ -151,40 +151,35 @@ class _AdminNavigationState extends State<AdminNavigation> {
           },
         ),
         bottomNavigationBar: Container(
+          margin:
+              const EdgeInsets.only(right: 12, left: 12, bottom: 20, top: 10),
+          height: 75,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            borderRadius: const BorderRadius.all(Radius.circular(30)),
             color: kWhite,
-            border: Border.all(color: kDarkGrey.withOpacity(0.9), width: 1),
+            border: Border.all(color: kDarkGrey.withOpacity(0.5), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: kMidtBlue.withOpacity(0.3),
+                offset: const Offset(0, 10),
+                blurRadius: 15,
+              ), // BoxShadow
+            ],
           ),
-          child: BottomAppBar(
-            elevation: 0,
-            color: Colors.transparent,
-            height: 80,
-            shape: const CircularNotchedRectangle(),
-            notchMargin: 10,
-            child: SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  NavbarItem(
-                      index: 0,
-                      icon: Icons.report,
-                      label: 'Reports',
-                      currentTab: _currentTab,
-                      onTap: navigateToPage),
-                  NavbarItem(
-                      index: 1,
-                      icon: Icons.supervisor_account_sharp,
-                      label: 'Accounts',
-                      currentTab: _currentTab,
-                      onTap: navigateToPage),
-                ],
-              ),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              NavbarItem(
+                  index: 0,
+                  icon: Icons.report,
+                  currentTab: _currentTab,
+                  onTap: navigateToPage),
+              NavbarItem(
+                  index: 1,
+                  icon: Icons.supervisor_account_sharp,
+                  currentTab: _currentTab,
+                  onTap: navigateToPage),
+            ],
           ),
         ),
       );

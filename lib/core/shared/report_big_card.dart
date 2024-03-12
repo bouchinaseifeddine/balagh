@@ -131,7 +131,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
               }
             },
             child: Container(
-              height: SizeConfig.defaultSize! * 38,
+              // height: SizeConfig.defaultSize! * 38,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -190,7 +190,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                   Image.network(
                     widget.report.firstImage,
                     fit: BoxFit.fill,
-                    height: SizeConfig.defaultSize! * 25,
+                    height: SizeConfig.screenHeight! * .3,
                     width: double.infinity,
                   ),
                   Padding(

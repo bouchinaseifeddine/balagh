@@ -38,7 +38,6 @@ class Balagh extends StatelessWidget {
     return MaterialApp(
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
       home: const SplashView(),
     );
   }
