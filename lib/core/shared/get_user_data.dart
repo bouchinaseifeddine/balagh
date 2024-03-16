@@ -8,8 +8,7 @@ Future<appUser?> getUserData(String userId) async {
 
     if (snapshot.exists) {
       final userData = snapshot.data()!;
-      List<String>? likedReports =
-          List<String>.from(userData['likedReports'] ?? []);
+
       return appUser(
           id: userId,
           userName: userData['username'] ?? '',

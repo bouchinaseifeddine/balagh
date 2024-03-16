@@ -33,7 +33,7 @@ class _ReportCardState extends State<ReportCard> {
 
     final QuerySnapshot<Map<String, dynamic>> supportsSnapShot =
         await FirebaseFirestore.instance
-            .collection('likes')
+            .collection('supports')
             .where('reportId', isEqualTo: widget.report.reportId)
             .get();
 

@@ -62,7 +62,6 @@ class _SignupViewState extends State<SignupView> {
         'role': 'user',
         'address': '',
         'image_url': '',
-        'likedReports': [],
         'score': 0,
       });
 

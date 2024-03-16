@@ -20,8 +20,8 @@ class ReportBigCard extends StatefulWidget {
 }
 
 class _ReportBigCardState extends State<ReportBigCard> {
-  var _isLiked = false;
-  int totalLikes = 0;
+  var _isSupported = false;
+  int totalSupports = 0;
   appUser? _reporter;
   appUser? user;
 
@@ -30,8 +30,8 @@ class _ReportBigCardState extends State<ReportBigCard> {
     super.initState();
 
     getReporterData();
-    getTotalLikes();
-    checkIfLiked();
+    getTotalSupports();
+    checkIfSupported();
   }
 
   void getReporterData() async {
@@ -39,36 +39,36 @@ class _ReportBigCardState extends State<ReportBigCard> {
     setState(() {});
   }
 
-  void checkIfLiked() async {
+  void checkIfSupported() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final likesSnapshot = await FirebaseFirestore.instance
-          .collection('likes')
+      final supportsSnapshot = await FirebaseFirestore.instance
+          .collection('supports')
           .where('userId', isEqualTo: user.uid)
           .where('reportId', isEqualTo: widget.report.reportId)
           .get();
       setState(() {
-        _isLiked = likesSnapshot.docs.isNotEmpty;
+        _isSupported = supportsSnapshot.docs.isNotEmpty;
       });
     }
   }
 
-  void getTotalLikes() async {
-    final likeQuery = await FirebaseFirestore.instance
-        .collection('likes')
+  void getTotalSupports() async {
+    final supportQuery = await FirebaseFirestore.instance
+        .collection('supports')
         .where('reportId', isEqualTo: widget.report.reportId)
         .get();
     setState(() {
-      totalLikes = likeQuery.docs.length;
+      totalSupports = supportQuery.docs.length;
     });
   }
 
-  void tapLike() async {
+  void tapSupport() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      if (_isLiked) {
+      if (_isSupported) {
         await FirebaseFirestore.instance
-            .collection('likes')
+            .collection('supports')
             .where('userId', isEqualTo: user.uid)
             .where('reportId', isEqualTo: widget.report.reportId)
             .get()
@@ -78,18 +78,18 @@ class _ReportBigCardState extends State<ReportBigCard> {
           }
         });
         setState(() {
-          _isLiked = !_isLiked;
-          totalLikes -= 1;
+          _isSupported = !_isSupported;
+          totalSupports -= 1;
         });
       } else {
-        // Add like
-        await FirebaseFirestore.instance.collection('likes').add({
+        // Add support
+        await FirebaseFirestore.instance.collection('supports').add({
           'userId': user.uid,
           'reportId': widget.report.reportId,
         });
         setState(() {
-          _isLiked = !_isLiked;
-          totalLikes += 1;
+          _isSupported = !_isSupported;
+          totalSupports += 1;
         });
       }
     }
@@ -212,7 +212,7 @@ class _ReportBigCardState extends State<ReportBigCard> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  tapLike();
+                                  tapSupport();
                                 },
                                 child: AnimatedSwitcher(
                                   duration: const Duration(milliseconds: 300),
@@ -226,14 +226,14 @@ class _ReportBigCardState extends State<ReportBigCard> {
                                   child: Icon(
                                     color: kMidtBlue,
                                     size: 32,
-                                    _isLiked
+                                    _isSupported
                                         ? Ionicons.flame
                                         : Ionicons.flame_outline,
-                                    key: ValueKey(_isLiked),
+                                    key: ValueKey(_isSupported),
                                   ),
                                 ),
                               ),
-                              Text('$totalLikes')
+                              Text('$totalSupports')
                             ],
                           )
                         ],

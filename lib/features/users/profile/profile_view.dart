@@ -147,7 +147,7 @@ class _ProfilViewState extends State<ProfileView> {
 
       final QuerySnapshot<Map<String, dynamic>> supportsSnapShot =
           await FirebaseFirestore.instance
-              .collection('likes')
+              .collection('supports')
               .where('userId', isEqualTo: userAuthenticated.uid)
               .get();
 
