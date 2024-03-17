@@ -40,10 +40,13 @@ class _ImageInputState extends State<ImageInput> {
       ),
     );
     if (_selectedImage != null) {
-      content = Image.file(
-        _selectedImage!,
-        fit: BoxFit.cover,
-        width: double.infinity,
+      content = ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Image.file(
+          _selectedImage!,
+          fit: BoxFit.cover,
+          width: double.infinity,
+        ),
       );
     }
     return Container(
