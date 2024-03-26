@@ -127,7 +127,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                           if (otherUsers[index]['image_url'] != '')
                             CircleAvatar(
                               backgroundImage:
-                                  NetworkImage(users[0]['image_url']),
+                                  NetworkImage(otherUsers[index]['image_url']),
                               radius: 20,
                             ),
                           if (otherUsers[index]['image_url'] == '')
