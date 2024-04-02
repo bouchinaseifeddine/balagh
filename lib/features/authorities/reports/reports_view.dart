@@ -138,7 +138,7 @@ class _ReportsViewState extends State<ReportsView> {
                 whereIn: ['Pothole', 'Garbage', 'Street Light', 'Graffiti'])
             .orderBy('isurgent', descending: true)
             .get();
-      } else if (widget.user!.role == 'sonalgaz') {
+      } else if (widget.user!.role == 'Sonelgaz') {
         snapshot = await FirebaseFirestore.instance
             .collection('reports')
             .where('currentState', isEqualTo: 'fixed')
