@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:balagh/core/constants/constants.dart';
 import 'package:balagh/core/shared/custom_buttons.dart';
 import 'package:balagh/core/utils/size_config.dart';
+import 'package:balagh/features/authorities/functions/predict_score.dart';
 import 'package:balagh/features/users/widgets/image_input.dart';
 import 'package:balagh/model/report.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -62,6 +64,31 @@ class _ReportFixingState extends State<ReportFixing> {
       });
 
       Timestamp currentTime = Timestamp.fromDate(DateTime.now());
+      // preparing report data for the score prediction
+      final distance = num.parse(widget.report.location!.getDistance);
+      final int category;
+      switch (widget.report.type) {
+        case 'Pothole' || 'Garbage' || 'Street Light' || 'Graffiti':
+          category = 1;
+          break;
+        case 'Water Leak' || 'Water Pollution' || 'Water Outage':
+          category = 2;
+          break;
+        case 'Gas Outage' || 'Power Outage' || 'Electricity Leak' || 'Gas Leak':
+          category = 3;
+          break;
+        default:
+          category = 1;
+      }
+      final String type = widget.report.type;
+      final status = widget.report.isUrgent ? 1 : 0;
+
+      final repotScore = await predictScore(
+        category: category,
+        distance: distance,
+        status: status,
+        type: type,
+      );
 
       final storageRef = FirebaseStorage.instance
           .ref()
@@ -79,12 +106,20 @@ class _ReportFixingState extends State<ReportFixing> {
         'currentState': 'fixed',
       });
 
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.report.userId)
+          .update({
+        'score': FieldValue.increment(repotScore),
+      });
+
       setState(() {
         _isAuthenticating = false;
       });
 
       _showReportAddedDialog(context);
     } catch (error) {
+      print('erorr $error');
       setState(() {
         _isAuthenticating = false;
       });

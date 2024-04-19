@@ -97,7 +97,6 @@ class _ReportsViewState extends State<ReportsView> {
 
   Future<List<Report>> fetchReports() async {
     final QuerySnapshot<Map<String, dynamic>> snapshot;
-    print('user role $_selectedTab');
     if (_selectedTab == 1) {
       if (widget.user!.role == 'Town hall') {
         snapshot = await FirebaseFirestore.instance
