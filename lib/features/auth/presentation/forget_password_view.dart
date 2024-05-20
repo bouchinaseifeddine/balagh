@@ -90,8 +90,10 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
     SizeConfig().init(context);
 
     return Scaffold(
+      backgroundColor: kWhite,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: kMidtBlue),
+        backgroundColor: kWhite,
       ),
       body: SizedBox(
         height: SizeConfig.screenHeight,

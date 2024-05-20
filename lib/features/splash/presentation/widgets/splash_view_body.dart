@@ -131,11 +131,9 @@ class _SplashViewBodyState extends State<SplashViewBody>
               color: kMidtBlue,
             )));
           } else if (userDataSnapshot.hasError) {
-            print('mochkilaa');
             return Text('Error: ${userDataSnapshot.error}');
           } else {
             final role = userDataSnapshot.data?['role'];
-            print('role $role');
 
             switch (role) {
               case 'user':

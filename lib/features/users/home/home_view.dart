@@ -109,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
                           },
                           color: kWhite,
                           fontSize: 14,
-                          text: 'View Ranking',
+                          text: 'View Leaderboard',
                           backgroundColor: kMidtBlue,
                           width: SizeConfig.defaultSize! * 17,
                           height: 40,

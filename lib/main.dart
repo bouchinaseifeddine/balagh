@@ -36,6 +36,7 @@ class Balagh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       home: const SplashView(),
