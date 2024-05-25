@@ -1,4 +1,5 @@
 {
   "C_Cpp.errorSquiggles": "disabled",
-  "cmake.sourceDirectory": "D:/graduation/balagh/linux"
+  "cmake.sourceDirectory": "D:/graduation/balagh/linux",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
