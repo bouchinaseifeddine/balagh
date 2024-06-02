@@ -1,6 +1,6 @@
-# balagh
+# balagh - Graduation-project
 
-A new Flutter project.
+Mobile App to report and solve urban problems
 
 ## Getting Started
 
